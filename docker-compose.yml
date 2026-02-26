@@ -1,0 +1,10 @@
+services:
+  site-checker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: site-checker
+    restart: unless-stopped
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./logs:/logs

@@ -1,0 +1,25 @@
+{
+  "telegram": {
+    "bot_token": "PUT_YOUR_BOT_TOKEN_HERE",
+    "chat_id": "PUT_YOUR_CHAT_ID_HERE"
+  },
+  "global_defaults": {
+    "interval_seconds": 60,
+    "timeout_seconds": 5,
+    "failure_threshold": 1
+  },
+  "targets": [
+    {
+      "name": "Main website",
+      "url": "https://example.com",
+      "enabled": true
+    },
+    {
+      "name": "Status page",
+      "url": "https://example.com/status",
+      "enabled": true,
+      "timeout_seconds": 5,
+      "failure_threshold": 2
+    }
+  ]
+}

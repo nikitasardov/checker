@@ -1,0 +1,32 @@
+# Python cache and virtual env
+__pycache__/
+*.py[cod]
+*.so
+.python-version
+.venv/
+venv/
+env/
+
+# Tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Logs and runtime artifacts
+logs/
+*.log
+
+# Local IDE/system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local secrets and environment
+.env
+.env.*
+config.json
+
