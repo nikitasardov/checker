@@ -44,7 +44,7 @@ class AvailabilityChecker:
             await self._check_target(target)
 
     async def _check_target(self, target: TargetConfig) -> None:
-        state_key = f"{target.name}|{target.url}"
+        state_key = target.url
         state = self._states.setdefault(state_key, TargetState())
         is_ok, reason = await self._request_status(target)
 
