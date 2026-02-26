@@ -53,7 +53,7 @@ def setup_logging() -> None:
 async def run_service() -> None:
     config = load_config("config.json")
     notifier = TelegramNotifier(config.telegram)
-    checker = AvailabilityChecker(notifier)
+    checker = AvailabilityChecker(notifier, checker_name=config.checker_name)
 
     logger.info("Service started. Interval: %s seconds", config.defaults.interval_seconds)
 
@@ -74,6 +74,9 @@ async def run_service() -> None:
                 if fresh_config.telegram != config.telegram:
                     checker.set_notifier(TelegramNotifier(fresh_config.telegram))
                     logger.info("Telegram notifier config reloaded")
+                if fresh_config.checker_name != config.checker_name:
+                    checker.set_checker_name(fresh_config.checker_name)
+                    logger.info("Checker name config reloaded")
                 config = fresh_config
                 logger.info("Config reloaded from config.json")
         except Exception:

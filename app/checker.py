@@ -18,12 +18,21 @@ class TargetState:
 
 
 class AvailabilityChecker:
-    def __init__(self, notifier: TelegramNotifier) -> None:
+    def __init__(self, notifier: TelegramNotifier, checker_name: str | None = None) -> None:
         self._notifier = notifier
         self._states: dict[str, TargetState] = {}
+        self._checker_name = checker_name
 
     def set_notifier(self, notifier: TelegramNotifier) -> None:
         self._notifier = notifier
+
+    def set_checker_name(self, checker_name: str | None) -> None:
+        self._checker_name = checker_name
+
+    def _message_prefix(self) -> str:
+        if not self._checker_name:
+            return ""
+        return f"[{self._checker_name}] "
 
     async def check_targets(self, targets: list[TargetConfig]) -> None:
         enabled_targets = [target for target in targets if target.enabled]
@@ -43,7 +52,7 @@ class AvailabilityChecker:
             if state.is_down:
                 state.is_down = False
                 state.consecutive_failures = 0
-                message = f"[RECOVERED] {target.name} is back online: {target.url}"
+                message = f"{self._message_prefix()}[RECOVERED] {target.name} is back online: {target.url}"
                 logger.info(message)
                 await self._notifier.send(message)
             else:
@@ -62,9 +71,10 @@ class AvailabilityChecker:
 
         if not state.is_down and state.consecutive_failures >= target.failure_threshold:
             state.is_down = True
+            response_info = reason if reason.startswith("status_code=") else f"error={reason}"
             message = (
-                f"[DOWN] {target.name} is unavailable: {target.url}. "
-                f"Reason: {reason}. Failures: {state.consecutive_failures}/{target.failure_threshold}"
+                f"{self._message_prefix()}[DOWN] {target.name} is unavailable: {target.url}. "
+                f"Response: {response_info}. Failures: {state.consecutive_failures}/{target.failure_threshold}"
             )
             logger.error(message)
             await self._notifier.send(message)

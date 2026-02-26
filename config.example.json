@@ -1,4 +1,5 @@
 {
+  "checker_name": "prod-ru-1",
   "telegram": {
     "bot_token": "PUT_YOUR_BOT_TOKEN_HERE",
     "chat_id": "PUT_YOUR_CHAT_ID_HERE"

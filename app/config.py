@@ -33,6 +33,7 @@ class AppConfig:
     telegram: TelegramConfig
     defaults: GlobalDefaults
     targets: list[TargetConfig]
+    checker_name: str | None = None
 
 
 def _validate_url(value: str) -> str:
@@ -68,6 +69,11 @@ def load_config(path: str | Path = "config.json") -> AppConfig:
         ),
     )
 
+    checker_name_raw = raw.get("checker_name")
+    checker_name = None
+    if checker_name_raw is not None:
+        checker_name = str(checker_name_raw).strip() or None
+
     targets_raw = raw.get("targets")
     if not isinstance(targets_raw, list) or not targets_raw:
         raise ValueError("targets must be a non-empty list")
@@ -96,4 +102,4 @@ def load_config(path: str | Path = "config.json") -> AppConfig:
             )
         )
 
-    return AppConfig(telegram=telegram, defaults=defaults, targets=targets)
+    return AppConfig(telegram=telegram, defaults=defaults, targets=targets, checker_name=checker_name)
